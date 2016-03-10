@@ -74,6 +74,7 @@ public class MainListAdapter extends RecyclerView.Adapter {
                 // poniższa metoda w animowany sposób usunie element z listy
                 // notifyItemRemoved(positionToDelete);
 
+
                 Log.d("Open: ", String.valueOf(position + 1));
                 listener.onItemSelected(position);
 
@@ -127,13 +128,13 @@ public class MainListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
         // uzupełniamy layout artykułu
         String article = mArticles.get(i);
-      /*  if(i != 0){
+
             Integer image = imageViews.get(i);
             ((MyViewHolder) viewHolder).mImage.setImageResource(image);
-        }*/
+
 
         ((MyViewHolder) viewHolder).mTitle.setText(article);
-       // ((MyViewHolder) viewHolder).mImage.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), image, 100, 100));
+        ((MyViewHolder) viewHolder).mImage.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), image, 100, 100));
 
     }
 

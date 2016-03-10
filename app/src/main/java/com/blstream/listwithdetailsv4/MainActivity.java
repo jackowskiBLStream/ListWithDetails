@@ -9,13 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity implements MainListAdapter.OnAdapterClickListener {
-
+    private static final String DETAILS_FRAGMENT_TAG = "detailsFragment";
+    private DetailsListFragment detailsListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-
+        detailsListFragment = new DetailsListFragment();
         if (savedInstanceState != null) {
             return;
         }
@@ -23,6 +24,14 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
 
         manageFragments();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.remove(detailsListFragment);
+        transaction.commit();
     }
 
     public boolean isTablet(Context context) {
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
 
     @Override
     public void onItemSelected(int position) {
-        DetailsListFragment detailsListFragment = new DetailsListFragment();
+
         Bundle args = new Bundle();
         args.putInt("position", position);
         detailsListFragment.setArguments(args);
@@ -70,13 +79,14 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
         // and add the transaction to the back stack so the user can navigate back
 
         if (isTablet(this)) {
-            transaction.replace(R.id.fragmentDetailsTabletContainer, detailsListFragment);
+            transaction.replace(R.id.fragmentDetailsTabletContainer, detailsListFragment, DETAILS_FRAGMENT_TAG );
         } else {
             transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
             transaction.replace(R.id.fragmentPhoneContainer, detailsListFragment);
 
         }
         transaction.addToBackStack(null);
+
 
         // Commit the transaction
         transaction.commit();
