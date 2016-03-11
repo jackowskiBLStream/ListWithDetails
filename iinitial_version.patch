@@ -1,0 +1,731 @@
+Index: app/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/.gitignore	(revision )
++++ app/.gitignore	(revision )
+@@ -0,0 +1,1 @@
++/build
+Index: app/src/test/java/com/blstream/listwithdetailsv4/ExampleUnitTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/test/java/com/blstream/listwithdetailsv4/ExampleUnitTest.java	(revision )
++++ app/src/test/java/com/blstream/listwithdetailsv4/ExampleUnitTest.java	(revision )
+@@ -0,0 +1,15 @@
++package com.blstream.listwithdetailsv4;
++
++import org.junit.Test;
++
++import static org.junit.Assert.*;
++
++/**
++ * To work on unit tests, switch the Test Artifact in the Build Variants view.
++ */
++public class ExampleUnitTest {
++    @Test
++    public void addition_isCorrect() throws Exception {
++        assertEquals(4, 2 + 2);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/main_list_single_element_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/main_list_single_element_layout.xml	(revision )
++++ app/src/main/res/layout/main_list_single_element_layout.xml	(revision )
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="50dp"
++    android:orientation="horizontal"
++    android:padding="16dp">
++
++
++    <ImageView
++        android:id="@+id/mainListImageView"
++        android:layout_width="50dp"
++        android:layout_height="50dp"
++        android:layout_gravity="center_horizontal" />
++
++    <TextView
++        android:id="@+id/mainListTextView"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="" />
++
++
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision )
++++ app/src/main/res/values/strings.xml	(revision )
+@@ -0,0 +1,4 @@
++<resources>
++    <string name="app_name">ListWithDetailsV4</string>
++
++</resources>
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/colors.xml	(revision )
++++ app/src/main/res/values/colors.xml	(revision )
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <color name="colorPrimary">#3F51B5</color>
++    <color name="colorPrimaryDark">#303F9F</color>
++    <color name="colorAccent">#FF4081</color>
++</resources>
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision )
++++ app/build.gradle	(revision )
+@@ -0,0 +1,28 @@
++apply plugin: 'com.android.application'
++
++android {
++    compileSdkVersion 23
++    buildToolsVersion "23.0.2"
++
++    defaultConfig {
++        applicationId "com.blstream.listwithdetailsv4"
++        minSdkVersion 15
++        targetSdkVersion 23
++        versionCode 1
++        versionName "1.0"
++    }
++    buildTypes {
++        release {
++            minifyEnabled false
++            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++        }
++    }
++}
++
++dependencies {
++    compile fileTree(dir: 'libs', include: ['*.jar'])
++    testCompile 'junit:junit:4.12'
++    compile 'com.android.support:appcompat-v7:23.2.0'
++    compile 'com.android.support:recyclerview-v7:23.2.0'
++    compile 'com.android.support:cardview-v7:23.2.0'
++}
+Index: app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/dimens.xml	(revision )
++++ app/src/main/res/values/dimens.xml	(revision )
+@@ -0,0 +1,5 @@
++<resources>
++    <!-- Default screen margins, per the Android Design guidelines. -->
++    <dimen name="activity_horizontal_margin">16dp</dimen>
++    <dimen name="activity_vertical_margin">16dp</dimen>
++</resources>
+Index: app/src/main/res/layout/details_list_fragment_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/details_list_fragment_layout.xml	(revision )
++++ app/src/main/res/layout/details_list_fragment_layout.xml	(revision )
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <android.support.v7.widget.RecyclerView
++        android:id="@+id/detailsList"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent" />
++
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/blstream/listwithdetailsv4/MainListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/blstream/listwithdetailsv4/MainListAdapter.java	(revision )
++++ app/src/main/java/com/blstream/listwithdetailsv4/MainListAdapter.java	(revision )
+@@ -0,0 +1,160 @@
++package com.blstream.listwithdetailsv4;
++
++import android.content.res.Resources;
++import android.graphics.Bitmap;
++import android.graphics.BitmapFactory;
++import android.media.Image;
++import android.support.v4.app.FragmentActivity;
++import android.support.v7.widget.RecyclerView;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++
++import java.util.ArrayList;
++import java.util.List;
++
++/**
++ * Created by blstream on 3/10/2016.
++ */
++public class MainListAdapter extends RecyclerView.Adapter {
++
++    // źródło danych
++    private List<String> mArticles = new ArrayList<>();
++    private List<Integer> imageViews = new ArrayList<>();
++    // obiekt listy artykułów
++    private RecyclerView mRecyclerView;
++    // context of the fragment
++    private FragmentActivity context;
++    private OnAdapterClickListener listener;
++
++
++
++    // konstruktor adaptera
++    public MainListAdapter(FragmentActivity context, List<String> pArticles,List<Integer> pImages, RecyclerView pRecyclerView) {
++        mArticles = pArticles;
++        imageViews = pImages;
++        mRecyclerView = pRecyclerView;
++        this.context = context;
++    }
++    public MainListAdapter(FragmentActivity context, List<String> pArticles, RecyclerView pRecyclerView) {
++        mArticles = pArticles;
++
++        mRecyclerView = pRecyclerView;
++        this.context = context;
++    }
++
++
++    @Override
++    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
++        super.onAttachedToRecyclerView(recyclerView);
++        listener = (OnAdapterClickListener) recyclerView.getContext();
++    }
++
++    @Override
++    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
++        // tworzymy layout artykułu oraz obiekt ViewHoldera
++        View view = LayoutInflater.from(viewGroup.getContext())
++                .inflate(R.layout.main_list_single_element_layout, viewGroup, false);
++
++        // dla elementu listy ustawiamy obiekt OnClickListener,
++        // który usunie element z listy po kliknięciu na niego
++        view.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                // odnajdujemy indeks klikniętego elementu
++                int position = mRecyclerView.getChildAdapterPosition(v);
++                // usuwamy element ze źródła danych
++                //mArticles.remove(positionToDelete);
++                // poniższa metoda w animowany sposób usunie element z listy
++                // notifyItemRemoved(positionToDelete);
++
++                Log.d("Open: ", String.valueOf(position + 1));
++                listener.onItemSelected(position);
++
++
++            }
++        });
++
++        // tworzymy i zwracamy obiekt ViewHolder
++        return new MyViewHolder(view);
++    }
++    public static int calculateInSampleSize(
++            BitmapFactory.Options options, int reqWidth, int reqHeight) {
++        // Raw height and width of image
++        final int height = options.outHeight;
++        final int width = options.outWidth;
++        int inSampleSize = 1;
++
++        if (height > reqHeight || width > reqWidth) {
++
++            final int halfHeight = height / 2;
++            final int halfWidth = width / 2;
++
++            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
++            // height and width larger than the requested height and width.
++            while ((halfHeight / inSampleSize) > reqHeight
++                    && (halfWidth / inSampleSize) > reqWidth) {
++                inSampleSize *= 2;
++            }
++        }
++
++        return inSampleSize;
++    }
++    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
++                                                         int reqWidth, int reqHeight) {
++
++        // First decode with inJustDecodeBounds=true to check dimensions
++        final BitmapFactory.Options options = new BitmapFactory.Options();
++        options.inJustDecodeBounds = true;
++        BitmapFactory.decodeResource(res, resId, options);
++
++        // Calculate inSampleSize
++        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
++
++        // Decode bitmap with inSampleSize set
++        options.inJustDecodeBounds = false;
++        return BitmapFactory.decodeResource(res, resId, options);
++    }
++
++
++    @Override
++    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
++        // uzupełniamy layout artykułu
++        String article = mArticles.get(i);
++      /*  if(i != 0){
++            Integer image = imageViews.get(i);
++            ((MyViewHolder) viewHolder).mImage.setImageResource(image);
++        }*/
++
++        ((MyViewHolder) viewHolder).mTitle.setText(article);
++       // ((MyViewHolder) viewHolder).mImage.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), image, 100, 100));
++
++    }
++
++    @Override
++    public int getItemCount() {
++        return mArticles.size();
++    }
++
++    public interface OnAdapterClickListener {
++        void onItemSelected(int position);
++    }
++
++    // implementacja wzorca ViewHolder
++    // każdy obiekt tej klasy przechowuje odniesienie do layoutu elementu listy
++    // dzięki temu wywołujemy findViewById() tylko raz dla każdego elementu
++    private class MyViewHolder extends RecyclerView.ViewHolder {
++        public TextView mTitle;
++        public ImageView mImage;
++
++
++        public MyViewHolder(View pItem) {
++            super(pItem);
++            mTitle = (TextView) pItem.findViewById(R.id.mainListTextView);
++            mImage = (ImageView) pItem.findViewById(R.id.mainListImageView);
++        }
++    }
++}
+Index: app/src/androidTest/java/com/blstream/listwithdetailsv4/ApplicationTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/androidTest/java/com/blstream/listwithdetailsv4/ApplicationTest.java	(revision )
++++ app/src/androidTest/java/com/blstream/listwithdetailsv4/ApplicationTest.java	(revision )
+@@ -0,0 +1,13 @@
++package com.blstream.listwithdetailsv4;
++
++import android.app.Application;
++import android.test.ApplicationTestCase;
++
++/**
++ * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
++ */
++public class ApplicationTest extends ApplicationTestCase<Application> {
++    public ApplicationTest() {
++        super(Application.class);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/styles.xml	(revision )
++++ app/src/main/res/values/styles.xml	(revision )
+@@ -0,0 +1,11 @@
++<resources>
++
++    <!-- Base application theme. -->
++    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
++        <!-- Customize your theme here. -->
++        <item name="colorPrimary">@color/colorPrimary</item>
++        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
++        <item name="colorAccent">@color/colorAccent</item>
++    </style>
++
++</resources>
+Index: app/src/main/res/layout/phone_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/phone_layout.xml	(revision )
++++ app/src/main/res/layout/phone_layout.xml	(revision )
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:orientation="vertical" android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <FrameLayout
++        android:id="@+id/fragmentPhoneContainer"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++    </FrameLayout>
++
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/main_list_fragment_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/main_list_fragment_layout.xml	(revision )
++++ app/src/main/res/layout/main_list_fragment_layout.xml	(revision )
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <android.support.v7.widget.RecyclerView
++        android:id="@+id/mainList"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent" />
++
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/blstream/listwithdetailsv4/MainListFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/blstream/listwithdetailsv4/MainListFragment.java	(revision )
++++ app/src/main/java/com/blstream/listwithdetailsv4/MainListFragment.java	(revision )
+@@ -0,0 +1,64 @@
++package com.blstream.listwithdetailsv4;
++
++import android.os.Bundle;
++import android.support.annotation.Nullable;
++import android.support.v4.app.Fragment;
++import android.support.v7.widget.DefaultItemAnimator;
++import android.support.v7.widget.LinearLayoutManager;
++import android.support.v7.widget.RecyclerView;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import java.util.ArrayList;
++import java.util.List;
++
++/**
++ *
++ */
++public class MainListFragment extends Fragment {
++
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++    }
++
++    @Nullable
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
++
++        View view = inflater.inflate(R.layout.main_list_fragment_layout, container, false);
++        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.mainList);
++        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
++        recyclerView.setItemAnimator(new DefaultItemAnimator());
++        List<String> dataList = new ArrayList<>();
++        List<Integer> imagesReferences = new ArrayList<>();
++        for (int i = 0; i < 20; i++) {
++            dataList.add("Position " + (i + 1));
++            switch(i % 5){
++                case 0:
++                    imagesReferences.add(R.drawable.photo1);
++                    break;
++                case 1:
++                    imagesReferences.add(R.drawable.photo2);
++                    break;
++                case 2:
++                    imagesReferences.add(R.drawable.photo3);
++                    break;
++                case 3:
++                    imagesReferences.add(R.drawable.photo4);
++                    break;
++                case 4:
++                    imagesReferences.add(R.drawable.photo5);
++                    break;
++            }
++        }
++        MainListAdapter adapter = new MainListAdapter(getActivity(), dataList, recyclerView);
++        recyclerView.setAdapter(adapter);
++
++
++        return view;
++    }
++
++}
+Index: app/src/main/java/com/blstream/listwithdetailsv4/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/blstream/listwithdetailsv4/MainActivity.java	(revision )
++++ app/src/main/java/com/blstream/listwithdetailsv4/MainActivity.java	(revision )
+@@ -0,0 +1,88 @@
++package com.blstream.listwithdetailsv4;
++
++import android.content.Context;
++import android.content.res.Configuration;
++import android.os.Bundle;
++import android.support.v4.app.FragmentManager;
++import android.support.v7.app.AppCompatActivity;
++
++
++public class MainActivity extends AppCompatActivity implements MainListAdapter.OnAdapterClickListener {
++
++
++    private boolean isTablet;
++    android.support.v4.app.FragmentTransaction transaction;
++    private DetailsListFragment detailsListFragment;
++    private Bundle args;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(getLayout());
++
++        if (savedInstanceState != null) {
++            return;
++        }
++
++
++        manageFragments();
++
++    }
++
++    public boolean isTablet(Context context) {
++        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE);
++        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
++        return (xlarge || large);
++    }
++
++    public int getLayout() {
++        isTablet = isTablet(this);
++        return isTablet ? R.layout.tablet_layout : R.layout.phone_layout;
++    }
++
++    public void manageFragments() {
++        // Create an instance of ExampleFragment
++        MainListFragment firstFragment = new MainListFragment();
++
++        // In case this activity was started with special instructions from an Intent,
++        // pass the Intent's extras to the fragment as arguments
++        firstFragment.setArguments(getIntent().getExtras());
++
++
++        // Add the fragment to the 'fragment_container' FrameLayout
++        FragmentManager fragmentManager = getSupportFragmentManager();
++        if (isTablet(this)) {
++            fragmentManager.beginTransaction()
++                    .add(R.id.fragmentMainTabletContainer, firstFragment).commit();
++        } else {
++            fragmentManager.beginTransaction()
++                    .add(R.id.fragmentPhoneContainer, firstFragment).commit();
++        }
++
++    }
++
++    @Override
++    public void onItemSelected(int position) {
++        detailsListFragment = new DetailsListFragment();
++        args = new Bundle();
++        args.putInt("position", position);
++        detailsListFragment.setArguments(args);
++
++        transaction = getSupportFragmentManager().beginTransaction();
++
++        // Replace whatever is in the fragment_container view with this fragment,
++        // and add the transaction to the back stack so the user can navigate back
++
++        if (isTablet(this)) {
++            transaction.replace(R.id.fragmentDetailsTabletContainer, detailsListFragment);
++        } else {
++            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
++            transaction.replace(R.id.fragmentPhoneContainer, detailsListFragment);
++
++        }
++        transaction.addToBackStack(null);
++
++        // Commit the transaction
++        transaction.commit();
++    }
++}
+Index: app/src/main/res/values-w820dp/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values-w820dp/dimens.xml	(revision )
++++ app/src/main/res/values-w820dp/dimens.xml	(revision )
+@@ -0,0 +1,6 @@
++<resources>
++    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
++         (such as screen margins) for screens with more than 820dp of available width. This
++         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
++    <dimen name="activity_horizontal_margin">64dp</dimen>
++</resources>
+Index: app/proguard-rules.pro
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/proguard-rules.pro	(revision )
++++ app/proguard-rules.pro	(revision )
+@@ -0,0 +1,17 @@
++# Add project specific ProGuard rules here.
++# By default, the flags in this file are appended to flags specified
++# in C:\Users\blstream\AppData\Local\Android\sdk/tools/proguard/proguard-android.txt
++# You can edit the include path and order by changing the proguardFiles
++# directive in build.gradle.
++#
++# For more details, see
++#   http://developer.android.com/guide/developing/tools/proguard.html
++
++# Add any project specific keep options here:
++
++# If your project uses WebView with JS, uncomment the following
++# and specify the fully qualified class name to the JavaScript interface
++# class:
++#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
++#   public *;
++#}
+Index: app/src/main/res/layout/tablet_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/tablet_layout.xml	(revision )
++++ app/src/main/res/layout/tablet_layout.xml	(revision )
+@@ -0,0 +1,18 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="horizontal">
++
++    <FrameLayout
++        android:id="@+id/fragmentMainTabletContainer"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_weight="2" />
++
++    <FrameLayout
++        android:id="@+id/fragmentDetailsTabletContainer"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_weight="1" />
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/blstream/listwithdetailsv4/DetailsListFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/blstream/listwithdetailsv4/DetailsListFragment.java	(revision )
++++ app/src/main/java/com/blstream/listwithdetailsv4/DetailsListFragment.java	(revision )
+@@ -0,0 +1,49 @@
++package com.blstream.listwithdetailsv4;
++
++import android.os.Bundle;
++import android.support.annotation.Nullable;
++import android.support.v4.app.Fragment;
++import android.support.v7.widget.DefaultItemAnimator;
++import android.support.v7.widget.LinearLayoutManager;
++import android.support.v7.widget.RecyclerView;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import java.util.ArrayList;
++import java.util.List;
++
++/**
++ *
++ */
++public class DetailsListFragment extends Fragment {
++
++    private RecyclerView recyclerDetailsView;
++    private List<String> dataList;
++
++
++    private View view;
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++    }
++
++    @Nullable
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
++
++        view = inflater.inflate(R.layout.main_list_fragment_layout, container, false);
++        recyclerDetailsView = (RecyclerView) view.findViewById(R.id.mainList);
++        recyclerDetailsView.setLayoutManager(new LinearLayoutManager(view.getContext()));
++        recyclerDetailsView.setItemAnimator(new DefaultItemAnimator());
++
++        dataList = new ArrayList<>();
++        int position = getArguments().getInt("position");
++        for (int i = 0; i < 5; i++) {
++            dataList.add("Position " + (position + 1) + " Detail position " + (i + 1));
++        }
++        recyclerDetailsView.setAdapter(new MainListAdapter(getActivity(), dataList, recyclerDetailsView));
++        return view;
++    }
++}
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision )
++++ app/src/main/AndroidManifest.xml	(revision )
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.blstream.listwithdetailsv4">
++
++    <application
++        android:allowBackup="true"
++        android:icon="@mipmap/ic_launcher"
++        android:label="@string/app_name"
++        android:supportsRtl="true"
++        android:theme="@style/AppTheme">
++        <activity android:name=".MainActivity">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++
++                <category android:name="android.intent.category.LAUNCHER" />
++            </intent-filter>
++        </activity>
++    </application>
++
++</manifest>
