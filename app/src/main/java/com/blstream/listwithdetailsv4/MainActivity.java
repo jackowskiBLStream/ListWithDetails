@@ -32,12 +32,13 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.remove(detailsListFragment);
-        transaction.commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack();
+
+
     }
 
-    public boolean isTablet(Context context) {
+    public boolean isTablet(Context context) { //TODO if width > height ...
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE);
         boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
 
         Bundle args = new Bundle();
         args.putInt("position", position);
+        detailsListFragment = new DetailsListFragment();
         detailsListFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

@@ -36,23 +36,7 @@ public class MainListFragment extends Fragment {
         List<Integer> imagesReferences = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             dataList.add("Position " + (i + 1));
-            switch (i % 5) {
-                case 0:
-                    imagesReferences.add(R.drawable.photo1);
-                    break;
-                case 1:
-                    imagesReferences.add(R.drawable.photo2);
-                    break;
-                case 2:
-                    imagesReferences.add(R.drawable.photo3);
-                    break;
-                case 3:
-                    imagesReferences.add(R.drawable.photo4);
-                    break;
-                case 4:
-                    imagesReferences.add(R.drawable.photo5);
-                    break;
-            }
+
         }
         MainListAdapter adapter = new MainListAdapter(getActivity(), dataList, imagesReferences, recyclerView);
         recyclerView.setAdapter(adapter);
