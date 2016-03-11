@@ -1,5 +1,7 @@
 package com.blstream.listwithdetailsv4;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,6 +37,11 @@ public class DetailsListFragment extends Fragment {
 
         TextView textView = (TextView) view.findViewById(R.id.detailTextView);
         textView.setText("Number " + position);
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.detailImageView);
+        Intent intent = getActivity().getIntent();
+        Bitmap bitmap1 = intent.getParcelableExtra("bitmap1");
+        imageView.setImageBitmap(bitmap1);
 
         /*RecyclerView recyclerDetailsView = (RecyclerView) view.findViewById(R.id.detailsList);
         recyclerDetailsView.setLayoutManager(new LinearLayoutManager(view.getContext()));

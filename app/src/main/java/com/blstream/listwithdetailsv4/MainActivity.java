@@ -1,8 +1,8 @@
 package com.blstream.listwithdetailsv4;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,32 +10,71 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements MainListAdapter.OnAdapterClickListener {
     private static final String DETAILS_FRAGMENT_TAG = "detailsFragment";
     private DetailsListFragment detailsListFragment;
+    private List<Bitmap> bitmapList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
+        //TODO: what is going here?
         detailsListFragment = new DetailsListFragment();
         if (savedInstanceState != null) {
             return;
         }
 
+        bitmapList = new ArrayList<>();
 
+
+        String[] fileNames = new String[0];
+        try {
+            fileNames = getAssets().list("assets");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // for(String name:fileNames){
+
+        //}
         manageFragments();
 
     }
 
+
+    public static Bitmap getBitmapFromAsset(Context context, String filePath) {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open(filePath);
+            bitmap = BitmapFactory.decodeStream(istr);
+        } catch (IOException e) {
+            // handle exception
+        }
+
+        return bitmap;
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack();
-
-
+        if(isTablet(this)){
+            //FIXME: no chyba nie finish, cos ze stackiem
+            finish();
+        }
+        else{
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack();
+        }
     }
 
     public boolean isTablet(Context context) { //TODO if width > height ...
@@ -84,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
         // and add the transaction to the back stack so the user can navigate back
 
         if (isTablet(this)) {
-            transaction.replace(R.id.fragmentDetailsTabletContainer, detailsListFragment, DETAILS_FRAGMENT_TAG );
+            transaction.replace(R.id.fragmentDetailsTabletContainer, detailsListFragment, DETAILS_FRAGMENT_TAG);
         } else {
             transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
             transaction.replace(R.id.fragmentPhoneContainer, detailsListFragment);
@@ -97,42 +136,7 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
         transaction.commit();
     }
 
-    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                   int reqWidth, int reqHeight) {
 
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
 
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
-    }
-
-    private int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 }

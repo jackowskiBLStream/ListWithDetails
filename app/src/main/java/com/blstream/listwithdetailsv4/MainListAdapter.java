@@ -1,12 +1,8 @@
 package com.blstream.listwithdetailsv4;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,27 +17,22 @@ import java.util.List;
  */
 public class MainListAdapter extends RecyclerView.Adapter {
 
-    public interface OnAdapterClickListener {
-        void onItemSelected(int position);
-    }
     // źródło danych
     private List<String> mArticles = new ArrayList<>();
-    private List<Integer> imageViews = new ArrayList<>();
+    private List<Bitmap> imageViews = new ArrayList<>();
     // obiekt listy artykułów
     private RecyclerView mRecyclerView;
     // context of the fragment
     private FragmentActivity context;
     private OnAdapterClickListener listener;
-
-
-
     // konstruktor adaptera
-    public MainListAdapter(FragmentActivity context, List<String> pArticles,List<Integer> pImages, RecyclerView pRecyclerView) {
+    public MainListAdapter(FragmentActivity context, List<String> pArticles, List<Bitmap> pImages, RecyclerView pRecyclerView) {
         mArticles = pArticles;
         imageViews = pImages;
         mRecyclerView = pRecyclerView;
         this.context = context;
     }
+
     public MainListAdapter(FragmentActivity context, List<String> pArticles, RecyclerView pRecyclerView) {
         mArticles = pArticles;
 
@@ -49,11 +40,8 @@ public class MainListAdapter extends RecyclerView.Adapter {
         this.context = context;
     }
 
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        listener = (OnAdapterClickListener) recyclerView.getContext();
+    public void setListener(OnAdapterClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -64,41 +52,50 @@ public class MainListAdapter extends RecyclerView.Adapter {
 
         // dla elementu listy ustawiamy obiekt OnClickListener,
         // który usunie element z listy po kliknięciu na niego
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // odnajdujemy indeks klikniętego elementu
-                int position = mRecyclerView.getChildAdapterPosition(v);
-                // usuwamy element ze źródła danych
-                //mArticles.remove(positionToDelete);
-                // poniższa metoda w animowany sposób usunie element z listy
-                // notifyItemRemoved(positionToDelete);
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // odnajdujemy indeks klikniętego elementu
+//                int position = mRecyclerView.getChildAdapterPosition(v);
+//                // usuwamy element ze źródła danych
+//                //mArticles.remove(positionToDelete);
+//                // poniższa metoda w animowany sposób usunie element z listy
+//                // notifyItemRemoved(positionToDelete);
+//
+//
+//                Log.d("Open: ", String.valueOf(position + 1));
+//                listener.onItemSelected(position);
 
 
-                Log.d("Open: ", String.valueOf(position + 1));
-                listener.onItemSelected(position);
-
-
-            }
-        });
+//            }
+//        });
 
         // tworzymy i zwracamy obiekt ViewHolder
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, listener);
     }
-
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
         // uzupełniamy layout artykułu
         String article = mArticles.get(i);
 
-          //  Integer image = imageViews.get(i);
-         //   ((MyViewHolder) viewHolder).mImage.setImageResource(image);
+        Bitmap image = imageViews.get(i % 5);
+        ((MyViewHolder) viewHolder).mImage.setImageBitmap(image);
+
+//ASYNC TASK TUTORIAL BY FILIP
+       /* AsyncTask oldTask = imgViw.getTag();
+        if (oldTag == null) {
+            AsyncTask task = new AsyncTask(imgNAme, imgView).execute();
+            imgView.setTag(task);
+        } else {
+            oldTask.cancel();
+            AsyncTask task = new AsyncTask(imgNAme, imgView).execute();
+            imgView.setTag(task);
+        }*/
 
 
         ((MyViewHolder) viewHolder).mTitle.setText(article);
-        //((MyViewHolder) viewHolder).mImage.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), image, 100, 100));
+        // ((MyViewHolder) viewHolder).mImage.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), image, 100, 100));
 
     }
 
@@ -107,6 +104,9 @@ public class MainListAdapter extends RecyclerView.Adapter {
         return mArticles.size();
     }
 
+    public interface OnAdapterClickListener {
+        void onItemSelected(int position);
+    }
 
     // implementacja wzorca ViewHolder
     // każdy obiekt tej klasy przechowuje odniesienie do layoutu elementu listy
@@ -115,11 +115,20 @@ public class MainListAdapter extends RecyclerView.Adapter {
         public TextView mTitle;
         public ImageView mImage;
 
-
-        public MyViewHolder(View pItem) {
+        public MyViewHolder(View pItem, final OnAdapterClickListener listener) {
             super(pItem);
             mTitle = (TextView) pItem.findViewById(R.id.mainListTextView);
             mImage = (ImageView) pItem.findViewById(R.id.mainListImageView);
+            pItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemSelected(getAdapterPosition());
+                    }
+                }
+            });
         }
+
+
     }
 }
