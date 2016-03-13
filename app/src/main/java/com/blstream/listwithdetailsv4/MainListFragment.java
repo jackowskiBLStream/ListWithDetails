@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,30 +50,28 @@ public class MainListFragment extends Fragment {
         }
         //TODO: Do it with hashmap (Position, bitmap)
         try {
-            decodeImagesFromAssets();
+            getPathImagesFromAssetsAndAddThemToList();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-       /* inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture1.jpg", 100, 100));
-        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture2.jpg", 100, 100));
-        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture3.jpg", 100, 100));
-        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture4.jpg", 100, 100));
-        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture5.jpg", 100, 100));*/
-
         MainListAdapter adapter = new MainListAdapter(getActivity(), dataList, inputStreamImagesList, recyclerView);
         recyclerView.setAdapter(adapter);
         adapter.setListener(new MainListAdapter.OnAdapterClickListener() {
             @Override
             public void onItemSelected(int position) {
                 //TODO: handle click here
+               // String stringUri = null;
+///                InputStream imageUrl = inputStreamImagesList.get(position);
+                DetailsListFragment ldf = new DetailsListFragment ();
                 Bundle args = new Bundle();
-                args.putString("data", dataList.get(position));
+                args.putInt("position", position);
+                ldf.setArguments(args);
+                FragmentTransaction fragmentManager = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentManager.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentManager.replace(R.id.fragmentPhoneContainer, ldf);
+                fragmentManager.addToBackStack(null).commit();
 
-                DetailsListFragment fragment = new DetailsListFragment();
-                fragment.setArguments(args);
+               // fragmentManager.beginTransaction().add(R.id.fragmentPhoneContainer, ldf).commit();
                 //todo: display fragment
             }
         });
@@ -80,7 +80,7 @@ public class MainListFragment extends Fragment {
         return view;
     }
 
-    public void decodeImagesFromAssets() throws IOException {
+    public void getPathImagesFromAssetsAndAddThemToList() throws IOException {
         AssetManager assetManager = getContext().getAssets();
 
         String[] imgPath = assetManager.list("img");
@@ -90,45 +90,5 @@ public class MainListFragment extends Fragment {
             inputStreamImagesList.add(is);
         }
     }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    public static Bitmap decodeSampledBitmapFromStream(InputStream is,
-                                                int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(is, null, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        //return BitmapFactory.decodeResource(res, resId, options);
-        return BitmapFactory.decodeStream(is, null, options);
-    }
-
 
 }

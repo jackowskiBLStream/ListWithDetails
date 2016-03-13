@@ -1,8 +1,8 @@
 package com.blstream.listwithdetailsv4;
 
-import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,8 +84,6 @@ public class MainListAdapter extends RecyclerView.Adapter {
         InputStream image = imageViews.get(i % 5);
 
         ((MyViewHolder) viewHolder).mTitle.setText(article);
-
-        //((MyViewHolder) viewHolder).mImage.setImageBitmap(image);
         ImageLoader imageLoader = new ImageLoader(((MyViewHolder) viewHolder).mImage);
         imageLoader.execute(image);
 
@@ -128,11 +126,10 @@ public class MainListAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     if (listener != null) {
                         listener.onItemSelected(getAdapterPosition());
+                        Log.d("Position ", String.valueOf(getAdapterPosition()));
                     }
                 }
             });
         }
-
-
     }
 }
