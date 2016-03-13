@@ -1,11 +1,9 @@
 package com.blstream.listwithdetailsv4;
 
-import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,7 +22,8 @@ import java.util.List;
  *
  */
 public class MainListFragment extends Fragment {
-
+    List<String> dataList;
+    List<InputStream> inputStreamImagesList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,20 +38,30 @@ public class MainListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.mainList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        dataList = new ArrayList<>();
+        inputStreamImagesList = new ArrayList<>();
         //FIXME:
-        final List<String> dataList = new ArrayList<>();
-        List<Bitmap> bitmapList = new ArrayList<>();
+
         for (int i = 0; i < 1000; i++) {
             dataList.add("Position " + (i + 1));
 
         }
-        bitmapList.add(decodeSampledBitmapFromResource( "picture1.jpg", 100, 100));
-        bitmapList.add(decodeSampledBitmapFromResource( "picture2.jpg", 100, 100));
-        bitmapList.add(decodeSampledBitmapFromResource( "picture3.jpg", 100, 100));
-        bitmapList.add(decodeSampledBitmapFromResource( "picture4.jpg", 100, 100));
-        bitmapList.add(decodeSampledBitmapFromResource("picture5.jpg", 100, 100));
+        //TODO: Do it with hashmap (Position, bitmap)
+        try {
+            decodeImagesFromAssets();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        MainListAdapter adapter = new MainListAdapter(getActivity(), dataList, bitmapList,  recyclerView);
+
+
+       /* inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture1.jpg", 100, 100));
+        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture2.jpg", 100, 100));
+        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture3.jpg", 100, 100));
+        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture4.jpg", 100, 100));
+        inputStreamImagesList.add(decodeSampledBitmapFromStream("img/picture5.jpg", 100, 100));*/
+
+        MainListAdapter adapter = new MainListAdapter(getActivity(), dataList, inputStreamImagesList, recyclerView);
         recyclerView.setAdapter(adapter);
         adapter.setListener(new MainListAdapter.OnAdapterClickListener() {
             @Override
@@ -63,49 +72,26 @@ public class MainListFragment extends Fragment {
 
                 DetailsListFragment fragment = new DetailsListFragment();
                 fragment.setArguments(args);
-                //todo: display framgnet
+                //todo: display fragment
             }
         });
-
-        //TODO: whaaat?
-        Intent intent = new Intent(view.getContext(), DetailsListFragment.class);
-        intent.putExtra("bitmap1",  bitmapList.get(0));
-        intent.putExtra("bitmap2",  bitmapList.get(1));
-        intent.putExtra("bitmap3",  bitmapList.get(2));
-        intent.putExtra("bitmap4",  bitmapList.get(3));
-        intent.putExtra("bitmap5",  bitmapList.get(4));
 
 
         return view;
     }
 
-    private Bitmap decodeSampledBitmapFromResource(String path,
-                                                   int reqWidth, int reqHeight) {
+    public void decodeImagesFromAssets() throws IOException {
         AssetManager assetManager = getContext().getAssets();
 
-        InputStream istr = null;
-        Bitmap bitmap = null;
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        try {
-            istr = assetManager.open(path);
+        String[] imgPath = assetManager.list("img");
 
-        } catch (IOException e) {
-            // handle exception
+        for (String anImgPath : imgPath) {
+            InputStream is = assetManager.open("img/" + anImgPath);
+            inputStreamImagesList.add(is);
         }
-
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        bitmap = BitmapFactory.decodeStream(istr, null,  options);
-        return bitmap;
     }
 
-    private int calculateInSampleSize(
+    public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
@@ -124,8 +110,25 @@ public class MainListFragment extends Fragment {
                 inSampleSize *= 2;
             }
         }
-
         return inSampleSize;
     }
+
+    public static Bitmap decodeSampledBitmapFromStream(InputStream is,
+                                                int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(is, null, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        //return BitmapFactory.decodeResource(res, resId, options);
+        return BitmapFactory.decodeStream(is, null, options);
+    }
+
 
 }

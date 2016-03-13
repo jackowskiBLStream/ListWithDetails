@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +20,15 @@ public class MainListAdapter extends RecyclerView.Adapter {
 
     // źródło danych
     private List<String> mArticles = new ArrayList<>();
-    private List<Bitmap> imageViews = new ArrayList<>();
+    private List<InputStream> imageViews = new ArrayList<>();
     // obiekt listy artykułów
     private RecyclerView mRecyclerView;
     // context of the fragment
     private FragmentActivity context;
     private OnAdapterClickListener listener;
+
     // konstruktor adaptera
-    public MainListAdapter(FragmentActivity context, List<String> pArticles, List<Bitmap> pImages, RecyclerView pRecyclerView) {
+    public MainListAdapter(FragmentActivity context, List<String> pArticles, List<InputStream> pImages, RecyclerView pRecyclerView) {
         mArticles = pArticles;
         imageViews = pImages;
         mRecyclerView = pRecyclerView;
@@ -79,8 +81,13 @@ public class MainListAdapter extends RecyclerView.Adapter {
         // uzupełniamy layout artykułu
         String article = mArticles.get(i);
 
-        Bitmap image = imageViews.get(i % 5);
-        ((MyViewHolder) viewHolder).mImage.setImageBitmap(image);
+        InputStream image = imageViews.get(i % 5);
+
+        ((MyViewHolder) viewHolder).mTitle.setText(article);
+
+        //((MyViewHolder) viewHolder).mImage.setImageBitmap(image);
+        ImageLoader imageLoader = new ImageLoader(((MyViewHolder) viewHolder).mImage);
+        imageLoader.execute(image);
 
 //ASYNC TASK TUTORIAL BY FILIP
        /* AsyncTask oldTask = imgViw.getTag();
@@ -93,9 +100,6 @@ public class MainListAdapter extends RecyclerView.Adapter {
             imgView.setTag(task);
         }*/
 
-
-        ((MyViewHolder) viewHolder).mTitle.setText(article);
-        // ((MyViewHolder) viewHolder).mImage.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), image, 100, 100));
 
     }
 

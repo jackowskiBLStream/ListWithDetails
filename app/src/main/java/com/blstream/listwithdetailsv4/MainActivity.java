@@ -21,35 +21,6 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
     private DetailsListFragment detailsListFragment;
     private List<Bitmap> bitmapList;
 
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(getLayout());
-        //TODO: what is going here?
-        detailsListFragment = new DetailsListFragment();
-        if (savedInstanceState != null) {
-            return;
-        }
-
-        bitmapList = new ArrayList<>();
-
-
-        String[] fileNames = new String[0];
-        try {
-            fileNames = getAssets().list("assets");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // for(String name:fileNames){
-
-        //}
-        manageFragments();
-
-    }
-
-
     public static Bitmap getBitmapFromAsset(Context context, String filePath) {
         AssetManager assetManager = context.getAssets();
 
@@ -64,14 +35,31 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
 
         return bitmap;
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getLayout());
+        //TODO: what is going here?
+        detailsListFragment = new DetailsListFragment();
+        if (savedInstanceState != null) {
+            return;
+        }
+
+        bitmapList = new ArrayList<>();
+
+
+        manageFragments();
+
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(isTablet(this)){
+        if (isTablet(this)) {
             //FIXME: no chyba nie finish, cos ze stackiem
             finish();
-        }
-        else{
+        } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
         }
@@ -135,8 +123,6 @@ public class MainActivity extends AppCompatActivity implements MainListAdapter.O
         // Commit the transaction
         transaction.commit();
     }
-
-
 
 
 }
